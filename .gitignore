@@ -1,0 +1,115 @@
+# -----------------------------
+# OS-specific - system generated files in MacOS and Windows
+# -----------------------------
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# -----------------------------
+# Python
+# -----------------------------
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.env/
+.venv/
+env/
+venv/
+ENV/
+envs/
+
+# Environment variables
+.env 
+# Distribution / packaging
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb~
+
+# PyCharm / VS Code
+.idea/
+.vscode/
+
+# -----------------------------
+# R
+# -----------------------------
+.Rhistory
+.RData
+.Ruserdata
+.Rproj.user/
+.Rproj
+.Rprofile
+.Renviron
+
+# renv (R environment manager)
+renv/library/
+renv/staging/
+# Keep renv.lock but ignore libraries
+!renv.lock
+
+# -----------------------------
+# Stata
+# -----------------------------
+*.log
+*.smcl
+*.stpr          # Stata project files (if unwanted)
+*.dta~          # temp backup files
+
+# -----------------------------
+# Google Apps Script (clasp)
+# -----------------------------
+# Ignore build artifacts if any
+node_modules/
+package-lock.json
+
+# -----------------------------
+# Data & Outputs (large/generated)
+# -----------------------------
+
+data/raw/*
+data/interim/*
+data/processed/*
+# data/external
+!data/raw/README.md
+!data/interim/README.md
+!data/processed/README.md
+
+outputs/*
+!outputs/README.md
+
+# -----------------------------
+# Misc
+# -----------------------------
+*.bak
+*.swp
+*.tmp
+
+# -----------------------------
+# pyodk
+# -----------------------------
+config/  
+# -----------------------------
+# pyodk local configuration
+# -----------------------------
+python-folder/config/
+load_env.sh
