@@ -5,9 +5,10 @@ There are multiple ways to manage Python versions, packages and environment.  Tr
 ## Principles
 - NCP users must maintain the latest version of Python.
 - Python virtual environments must always be used.
-- Standard Requirements must include at least `numpy`, `pandas`, `matplotlib` and `ipython`.
+- Standard Requirements must include at least `numpy`, `pandas`, `matplotlib` `ipython`, and pyodk
 - If it is anticipated that Python will be used, two virtual environments should be prepared for each repository (.venv and .venv_stata).
 - All users must know how to install and manage Python versions, packages and environments using any method of their choice.
+  - Both `uv` and `pyenv` installation methods are shown below.  The former preferred. 
 - The .venv_stata Stata environment is used by running in Stata  `python set exec pyexecutable` where pyexecutable is the absolute path to the python in .venv_stata.  
 
 ## Setup Python with `uv`
@@ -77,9 +78,16 @@ pyenv global 3.14.0
 ```
 python --version
 ```
-## Create Python environments per repository
+## Create Python environments per repository with `uv`
 - This script creates two virtual environments (.venv and .venv_stata)
-- Default Packages are installed based on [requirements.txt](./requirements.txt) which includes pandas, numpy, matplotlib, ipython.  Modify accordingly. 
-Make the shell script executable `chmod +x setup_py_uv.sh`
-Run: `./setup_py_uv.sh`
+- Default Packages are installed based on [requirements.txt](./requirements.txt) which includes pandas, numpy, matplotlib, ipython, and pyodk.  Modify accordingly. 
+- In your project repository root run this:
+```
+# Replace 'main' with your default branch name if different
+curl -fsSL https://raw.githubusercontent.com/<YOUR_GITHUB_USERNAME>/python-js/main/setup_py_uv.sh | bash
+```
+
+## Create Python environments per repository with `pyenv`
+- Make script executable `chmod +x setup_py_pyenv.sh`
+- Run : `./setup_py_pyenv.sh`
 
