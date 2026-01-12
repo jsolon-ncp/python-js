@@ -20,7 +20,7 @@ There are multiple ways to manage Python versions, packages and environment.  Tr
 #### Brew installed versions
 - List python installations with brew `brew list | grep python`.  This may return python3.13 (used as an example)
 - Optional :  the executable path for each python found `brew --prefix python@3.13`.  
-- Uninstall : `brew uninstall python3.13` and repeat for each version found
+- Uninstall : `brew uninstall python@3.13` and repeat for each version found
 - Cleanup dependencies : `brew autoremove`
 
 #### Pyenv installed versions
@@ -90,4 +90,3 @@ curl -fsSL https://raw.githubusercontent.com/<YOUR_GITHUB_USERNAME>/python-js/ma
 ## Create Python environments per repository with `pyenv`
 - Make script executable `chmod +x setup_py_pyenv.sh`
 - Run : `./setup_py_pyenv.sh`
-
