@@ -90,3 +90,20 @@ curl -fsSL https://raw.githubusercontent.com/<YOUR_GITHUB_USERNAME>/python-js/ma
 ## Create Python environments per repository with `pyenv`
 - Make script executable `chmod +x setup_py_pyenv.sh`
 - Run : `./setup_py_pyenv.sh`
+
+# Notes on Project Repository Directories
+## Basic Rules
+- Data lives in ./data
+- Outputs live in ./tables or ./figures or ./outputs/tables or ./outputs/figures
+- Environment are in ./env, separated by language (.venv for python, .venv-stata for python via stata, renv, profile.do)
+- Logs are in ./logs
+- Documentation is in ./docs
+- Configurations are in ./config
+- .gitignore ignores ./data and ./config
+- Code live in ./scripts and ./src (where src = source )
+  - in ./scripts are code that orchestrates the project tasks
+  - in ./src are task specific code per language scripts to follow programming convention.  src = source.
+
+  This repository will follow that structure.  Note that the setup_py_uv.sh does not yet follow this structrue (Jan 12 2025)
+
+##
