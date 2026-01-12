@@ -84,12 +84,12 @@ python --version
 - In your project repository root run this:
 ```
 # Replace 'main' with your default branch name if different
-curl -fsSL https://raw.githubusercontent.com/<YOUR_GITHUB_USERNAME>/python-js/main/setup_py_uv.sh | bash
+curl -fsSL https://raw.githubusercontent.com/<YOUR_GITHUB_USERNAME>/python-js/main/scripts/setup_py_uv.sh | bash
 ```
 
 ## Create Python environments per repository with `pyenv`
-- Make script executable `chmod +x setup_py_pyenv.sh`
-- Run : `./setup_py_pyenv.sh`
+- Make script executable `chmod +x ./scripts/setup_py_pyenv.sh`
+- Run : `./scripts/setup_py_pyenv.sh`
 
 # Notes on Project Repository Directories
 ## Basic Rules
