@@ -1,15 +1,27 @@
 # John's Python Repository
 
-There are multiple ways to manage Python versions, packages and environment.  Traditionally, this is done with `pyenv`, `pip`, and `venv`. Modern methods use `Poetry` (core language Python) or `uv` (core language Rust).  Best practice requires running python in a projects's own python environment.  Python and Stata environments should be separate to anticipate any incompatibilities with STata when Python is upgraded as these have occured in the past.  
+This repository will document how to use python from 
+- installation of the required NCP python version
+- creation of environments for python 
+- use of python for core tasks 
 
-## Principles
-- NCP users must maintain the latest version of Python.
+## Organization
+- Read Me shows basic principles
+- Documentation in ./docs
+- Environments in ./env
+- Shell scripts in ./scripts
+- Python code (.py) in ./src/python
+- Issues in NCP Discord [all-python forum](https://discord.com/channels/1440712482510475419/1446090175515066460)
+
+## Basic Principles
+- NCP users must maintain the latest version of Python that allows the installation of all libraries required.  As of Jan 2026, this should be Python 3.13.11 because of incompatibilities of pyodk with 3.14.
 - Python virtual environments must always be used.
-- Standard Requirements must include at least `numpy`, `pandas`, `matplotlib` `ipython`, and pyodk
-- If it is anticipated that Python will be used, two virtual environments should be prepared for each repository (.venv and .venv_stata).
-- All users must know how to install and manage Python versions, packages and environments using any method of their choice.
-  - Both `uv` and `pyenv` installation methods are shown below.  The former preferred. 
+- Standard Requirements must include at least `numpy`, `pandas`, `matplotlib` `ipython`, and `pyodk`
+- If Python will be used, create two python environments, in your repository using  (.venv and .venv_stata) using the script `./scripts/setup_py_uv.sh`.
+- Python versions, packages and environments will be managed using `uv` only.  Use of other installations should have similar documentation (eg `pyenv` or `conda installations`) to be written by those who use them.
 - The .venv_stata Stata environment is used by running in Stata  `python set exec pyexecutable` where pyexecutable is the absolute path to the python in .venv_stata.  
+
+See docs/howto for 
 
 ## Setup Python with `uv`
 ### Rationale
@@ -78,14 +90,7 @@ pyenv global 3.14.0
 ```
 python --version
 ```
-## Create Python environments per repository with `uv`
-- This script creates two virtual environments (.venv and .venv_stata)
-- Default Packages are installed based on [requirements.txt](./requirements.txt) which includes pandas, numpy, matplotlib, ipython, and pyodk.  Modify accordingly. 
-- In your project repository root run this:
-```
-# Replace 'main' with your default branch name if different
-curl -fsSL https://raw.githubusercontent.com/<YOUR_GITHUB_USERNAME>/python-js/main/scripts/setup_py_uv.sh | bash
-```
+``
 
 ## Create Python environments per repository with `pyenv`
 - Make script executable `chmod +x ./scripts/setup_py_pyenv.sh`
@@ -107,3 +112,4 @@ curl -fsSL https://raw.githubusercontent.com/<YOUR_GITHUB_USERNAME>/python-js/ma
   This repository will follow that structure.  Note that the setup_py_uv.sh does not yet follow this structrue (Jan 12 2025)
 
 ##
+

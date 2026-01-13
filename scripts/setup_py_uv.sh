@@ -1,77 +1,77 @@
 #!/bin/bash
+# =========================================
+# Robust Python Environment Setup with uv
+# =========================================
 
-# --- Configuration ---
-# NOTE: The PYTHON_VERSION constant is kept to specify the target version for the venvs,
-# but the script will rely on this version being available on the system PATH.
-PYTHON_VERSION="3.14"
+set -euo pipefail
 
-DEFAULT_VENV_NAME=".venv"
-STATA_VENV_NAME=".venv_stata"
-DEFAULT_REQUIREMENTS="requirements.txt"
-STATA_REQUIREMENTS="requirements.txt"
+echo "Setting up Python environments using uv"
 
-# --- 1. Identify Python Interpreter ---
-# Action: Removed 'uv python install' step.
-# Relying on an existing Python 3.x interpreter being available on the system PATH.
-# We use the version number constant to construct the expected executable name.
-echo "1. Identifying Python interpreter (relying on system/managed install)..."
-PYTHON_EXEC="python$PYTHON_VERSION"
+# -------------------------
+# 1. Determine Project Root
+# -------------------------
+# PROJECT_ROOT points to the repo root relative to this script
+PROJECT_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+echo "Project root detected at: $PROJECT_ROOT"
 
-# Check if the desired Python executable exists
-if ! command -v "$PYTHON_EXEC" &> /dev/null
-then
-    echo "Error: Python executable '$PYTHON_EXEC' not found on the system PATH. Exiting."
-    echo "Please ensure Python $PYTHON_VERSION is installed and accessible."
-    exit 1
-fi
-echo "Found interpreter: $PYTHON_EXEC"
-echo "--------------------------------------------------"
+# -------------------------
+# 2. Define venvs and requirements
+# -------------------------
+ENV_DIR="$PROJECT_ROOT/env"
+DEFAULT_VENV="$ENV_DIR/.venv"
+STATA_VENV="$ENV_DIR/.venv_stata"
 
-# --- 2. Create and Configure Default Environment (.venv) ---
-echo "2. Creating and configuring default environment: $DEFAULT_VENV_NAME"
+DEFAULT_REQUIREMENTS="$PROJECT_ROOT/requirements.txt"
+STATA_REQUIREMENTS="$PROJECT_ROOT/requirements.txt"  # adjust if different
 
-# Create the environment
-uv venv --python "$PYTHON_EXEC" "$DEFAULT_VENV_NAME" || { echo "Error: Venv creation failed. Exiting."; exit 1; }
+mkdir -p "$ENV_DIR"
 
-# Activate and Install Packages
-if [ -f "$DEFAULT_REQUIREMENTS" ]; then
-    # Source the environment's activate script to set the PATH
-    source "$DEFAULT_VENV_NAME/bin/activate"
-    
-    echo "   -> Installing packages from $DEFAULT_REQUIREMENTS..."
-    uv pip install -r "$DEFAULT_REQUIREMENTS" || { echo "Error: Package installation in $DEFAULT_VENV_NAME failed."; deactivate; exit 1; }
-    
-    # Deactivate the environment before moving on
+# -------------------------
+# 3. Function to create venv and install packages
+# -------------------------
+create_venv_and_install() {
+    local VENV_PATH="$1"
+    local REQUIREMENTS_FILE="$2"
+    local VENV_NAME
+    VENV_NAME=$(basename "$VENV_PATH")
+
+    # Remove old venv if exists
+    if [ -d "$VENV_PATH" ]; then
+        echo "Removing existing venv: $VENV_PATH"
+        rm -rf "$VENV_PATH"
+    fi
+
+    echo "Creating virtual environment: $VENV_PATH"
+    uv venv "$VENV_PATH" --python python
+
+    # Activate venv immediately to ensure uv pip works
+    source "$VENV_PATH/bin/activate"
+
+    # Check requirements file exists
+    if [ -f "$REQUIREMENTS_FILE" ]; then
+        echo "Installing packages from $REQUIREMENTS_FILE into $VENV_NAME..."
+        uv pip install -r "$REQUIREMENTS_FILE"
+        echo "Packages installed successfully in $VENV_NAME"
+    else
+        echo "Requirements file not found: $REQUIREMENTS_FILE. Skipping package installation."
+    fi
+
+    # Deactivate environment
     deactivate
-    
-    echo "   -> Packages installed successfully."
-else
-    echo "   -> Warning: $DEFAULT_REQUIREMENTS not found. Skipping package installation."
-fi
-echo "--------------------------------------------------"
+    echo "--------------------------------------------------"
+}
 
+# -------------------------
+# 4. Create default venv
+# -------------------------
+create_venv_and_install "$DEFAULT_VENV" "$DEFAULT_REQUIREMENTS"
 
-# --- 3. Create and Configure Stata Environment (.venv_stata) ---
-echo "3. Creating and configuring Stata environment: $STATA_VENV_NAME"
+# -------------------------
+# 5. Create Stata venv
+# -------------------------
+create_venv_and_install "$STATA_VENV" "$STATA_REQUIREMENTS"
 
-# Create the environment
-uv venv --python "$PYTHON_EXEC" "$STATA_VENV_NAME" || { echo "Error: Stata venv creation failed. Exiting."; exit 1; }
-
-# Activate and Install Packages
-if [ -f "$STATA_REQUIREMENTS" ]; then
-    # Source the environment's activate script
-    source "$STATA_VENV_NAME/bin/activate"
-    
-    echo "   -> Installing packages from $STATA_REQUIREMENTS..."
-    uv pip install -r "$STATA_REQUIREMENTS" || { echo "Error: Package installation in $STATA_VENV_NAME failed."; deactivate; exit 1; }
-    
-    # Deactivate the environment
-    deactivate
-    
-    echo "   -> Packages installed successfully."
-else
-    echo "   -> Warning: $STATA_REQUIREMENTS not found. Skipping package installation."
-fi
-echo "--------------------------------------------------"
-
-echo "✅ Setup complete. Both virtual environments are fully configured."
+echo "Setup complete. Both Python environments are ready."
+echo "Activate with:"
+echo "  source $DEFAULT_VENV/bin/activate      # Default Python"
+echo "  source $STATA_VENV/bin/activate        # Stata Python"
