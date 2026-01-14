@@ -1,4 +1,4 @@
-# John's Python Repository
+# Python Repository
 
 This repository will document how to use python from 
 - installation of the required NCP python version
@@ -7,7 +7,7 @@ This repository will document how to use python from
 
 ## Organization
 - Read Me shows basic principles
-- How to do tasks in ./docs/howto.md
+- How to do tasks in the [How To Document](./docs/howto.md)
 - Environments in ./env
 - Shell scripts in ./scripts
 - Python code (.py) in ./src/python
