@@ -1,98 +1,123 @@
 # How to do things in Python
 
-## Install uv
-uv : `curl -LsSf https://astral.sh/uv/install.sh | sh`
-### Rationale
-- Multi-functional and can do what `pyenv` (Manage Python versions) and `pip` (install packages) and `venv` (manage environments) can do
-- Fast 
+## Use uv for python, package and enviroment management
+- `uv` is a multi-functional program that  can do what `pyenv` (Manage Python versions) and `pip` (install packages) and `venv` (manage environments) can do. It is faster than pyenv and allows us to master only one program instead of 3.
+- Install uv : 
+```
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
 
-### Remove old Python versions 
-#### Brew installed versions
-- List python installations with brew `brew list | grep python`.  This may return python3.13 (used as an example)
-- Optional :  the executable path for each python found `brew --prefix python@3.13`.  
-- Uninstall : `brew uninstall python@3.13` and repeat for each version found
-- Cleanup dependencies : `brew autoremove`
+## Remove old Python versions 
+To have a clean Python installation, remove all older python versions except the one that comes with MacOS. 
 
-#### Pyenv installed versions
-- List python installations with `pyenv versions`.  Example result 3.13
-- Uninstall with `pyenv uninstall 3.13`.  
-- Comment out  `pyenv` references in .zshrc .  This avoids conflict in case you want to use `deactivate` to deactivate an environment.
-  - Find .zshrc : `ls -a ~ | grep zshrc`
-  - Open with vscodium `codium .zshrc` or `nano` and comment out the lines as below : 
+### Remove Brew installed versions
+- List python installations with brew 
+```
+brew list | grep python
+```
+- This may return python3.13 (used as an example)
+- Uninstall with:
+```
+brew uninstall python@3.13
+```
+- Repeat for each version found
+- Cleanup dependencies: 
+```
+brew autoremove
+```
+
+### Remove Pyenv installed versions
+- List python installations via pyenv 
+- Example output may include 3.13.x
+```
+pyenv versions
+```
+- Uninstall a specific python version
+- Replace 3.13.x with the version you want to remove. 
+- Repeat for any versions you no longer need. 
+```
+pyenv uninstall 3.13.x
+```
+### Disable pyenv in shell
+To avoid conflicts with `uv`, virtual environments and `deactivate`, comment out  `pyenv` initialization in your shell configuration. 
+- Locate your .zshrc 
+```
+ls -a ~ | grep zshrc
+```
+- Edit .zshrc 
+```
+nano ~/.zshrc
+```
+- Comment out the following lines if present
 ```
 #eval "$(pyenv init --path)"
 #eval "$(pyenv init -)"
 #eval "$(pyenv virtualenv-init -)"
 ```
-- Alteratively run  `sed -i '' '/pyenv/s/^/# /' ~/.zshrc`
-#### Official Python Installer installations
-- These cannot be removed with brew or pyenv
--  Find the Frameworks folder `ls -l /Library/Frameworks/Python.framework/Versions/` Assume 3.12 and Current->3.12
-- Remove the python installation ` sudo rm -rf /Library/Frameworks/Python.framework/Versions/3.12`
-- Remove the symlink `sudo rm  /Library/Frameworks/Python.framework/Versions/Current`
+- Save and Exit
+- Reload shell configuration
+```
+source ~/.zshrc
+```
+### Disable pyenv in shell automatically (Alternative)
+```
+sed -i '' '/pyenv/s/^/# /' ~/.zshrc
+source ~/.zshrc
+```
 
-
+### Remove Official Python Installer installations
+- These are installations from downloaded installers from the web.  These cannot be removed with brew or pyenv
+-  Find the Frameworks folder 
+-  Results can be 3.12.x
+```
+ls -l /Library/Frameworks/Python.framework/Versions/
+``` 
+Remove the Python installation (replace 3.12.x with the python version)
+```
+sudo rm -rf /Library/Frameworks/Python.framework/Versions/3.12.x
+```
+- Remove the symlink 
+```
+sudo rm  /Library/Frameworks/Python.framework/Versions/Current
+```
 
 ### List installed python versions
-- Show versions that can be installed `uv python list`
-- Show installed versions `uv python list --only-installed` should show all installed python versions in case they have not been removed previously.
+- Show versions that can be installed:
+```
+uv python list
+```
+- Show installed versions in case they have not been removed previously: 
+```
+uv python list --only-installed
+``` 
 - Python in usr/bin/python3 were installed with the MacOS.  Leave that alone.
 
 ### Install with uv
-- Install : `uv python install <version> --default`; adding `--default` creates executables python3 and python such that running these commands point to python3.14.
-- Verify : `uv python list --only-installed`
+- Principle : `uv python install <version> --default`; adding `--default` creates executables python3 and python such that running these commands point to the installed python version.
+- Run this to ensure compatibility with pyodk as of Jan 2026. 
+```
+uv python install 3.13.11
+```
+- Verify installation: 
+```
+uv python list --only-installed
+```
 
-## Install Python using `pyenv` 
-- Only if you do not want to use `uv`
-- Remove all other versions of Python as above see "Remove old Python versions"
-- Install pyenv (Python Version Manager)
-```
-brew install pyenv
-```
-- Initialize pyenv 
-```
-echo 'eval "$(pyenv init --path)"' >> ~/.zshrc
-echo 'eval "$(pyenv init -)"' >> ~/.zshrc
-source ~/.zshrc
-```
-- Install Python
-```
-pyenv install 3.14.0
-```
-- Set this as the main python version
-```
-pyenv global 3.14.0
-```
-- Confirm python version
-```
-python --version
-```
-``
-
-## Create Python environments per repository with `pyenv`
-- Make script executable `chmod +x ./scripts/setup_py_pyenv.sh`
-- Run : `./scripts/setup_py_pyenv.sh`
-
-
-
-
-## Install NCP's preferred Python version
-## Maintain Python Installations 
-- See [ReadMe](./readme.md) for initial installation
 
 ## Upgrade your global python installation installed by uv
-- This example upgrades from 3.14 to 3.14.2
+- This example upgrades from 3.13.11 to 3.14.2
 - To maintain only one python package, you have to delete the previously installed one.
+- It is also okay to install both 3.13.11 and 3.14.2 and just choose which one will be applied to your .venv and .venv-stata
 - This shows how to uninstall the current version and Install the new one assuming you have gone through ReadMe and removed python versions installed by Homebrew, Conda, etc.
 - Verify the installed python with `uv python list --only-installed`
 - Identify the version you want to install with `uv python list`
-- Uninstall with `uv python uninstall 3.14`
+- Uninstall with `uv python uninstall 3.13.11`
 - Install with `uv python install 3.14.2 --default` ; using default automatcially creates symlinks
 
 ## Create a symlink to the python installation
 - If you did not install wiht --default, it would be useful to create symlinks.
 - Locate the uv installed python
-- Run this code (note this is a sample)
+- Modify this code (note this is a sample)
 ```
 ln -sf "$HOME/.local/share/uv/python/cpython-3.14.0-macos-x86_64-none/bin/python3.14" "$HOME/.local/bin/python3"
 ```
@@ -101,7 +126,31 @@ ln -sf "$HOME/.local/share/uv/python/cpython-3.14.0-macos-x86_64-none/bin/python
 - Verify with `python3 --version`
 
 ## Create Python environments per repository with `uv`
-- This script creates two virtual environments (.venv and .venv_stata)
+### Create interactively (must know)
+- To create an environment via uv, you need to define :
+  - project root directory 
+  - env directory ./env
+  - names of the virtual environments - .venv and .venv-stata
+  - name of requirements file - requirements.txt
+- Note that :
+  - `uv venv` is the key command
+  - `./env/.venv` is the path to the venv you want to create
+  - ``-- python python` is the python option of `uv venv` which define which python version to use.  By stating `-- python python` you are telling uv venv to use what your system calls `python` which was defined by your simlink which in turn is defined by your uv python installed version.  
+  - in other words, if you want to have anohter python version in your .venv, you need to specify that (eg `uv venv ./env/.venv -- python python3.10`)
+#### Python venv
+```
+uv venv ./env/.venv --python python 
+source "./env/.venv/bin/activate"
+uv pip install -r ./requirements.txt
+```
+#### Python venv for Stata
+```
+uv venv ./env/.venv-stata --python python
+source "./env/.venv-stata/bin/activate"
+uv pip install -r ./requirements.txt
+```
+### Create Python environments per repository with `uv` via script
+- This script creates two virtual environments (.venv and .venv_stata) based on uv venv, activation and uv pip install sequence.  
 - Default Packages are installed based on [requirements.txt](./requirements.txt) which includes pandas, numpy, matplotlib, ipython, and pyodk.  Modify accordingly. 
 - In your project repository root run this:
 ```
@@ -110,9 +159,9 @@ curl -fsSL https://raw.githubusercontent.com/<YOUR_GITHUB_USERNAME>/python-js/ma
 ```
 
 ## Install Pyodk
-- See [ReadMe](./readme.md).  The default NCP python installation should include pyodk
+- The default NCP python installation should include pyodk
+- However, if you did not use that and you want to install pyodk to an existing venv found in ./env/.venv, do this: 
 ```
 source ./env/.venv/bin/activate
 uv pip install pyodk
 ```
-Authenticate with ODK Central
