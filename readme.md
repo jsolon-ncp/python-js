@@ -30,6 +30,7 @@ This repository will document how to use python
 ## Goals (defined in Jan 12 2026 Mtg)
 - Install Python 
 - Create project environments
+- Configure your IDE to use the correct python interpter (added Jan 14)
 - Import data from ODK Central using pyodk
 - Managing ODK Central using pyodk
   - Adding Users for App

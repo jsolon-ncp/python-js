@@ -103,7 +103,6 @@ uv python install 3.13.11
 uv python list --only-installed
 ```
 
-
 ## Upgrade your global python installation installed by uv
 - This example upgrades from 3.13.11 to 3.14.2
 - To maintain only one python package, you have to delete the previously installed one.
@@ -165,3 +164,11 @@ curl -fsSL https://raw.githubusercontent.com/<YOUR_GITHUB_USERNAME>/python-js/ma
 source ./env/.venv/bin/activate
 uv pip install pyodk
 ```
+
+## Work with your VSCodium or Visual Studio Code
+- VSCodium will select a python interpreter to use for any repository (folder) you open.  If you do not set that for your repository, it may use the globally installed python 3.x.  If you project requires another version or another set of libraries, then your code would fail.  Therefore, it is important to tell your IDE that you are using a specific python interpreter located in your virtual environment 
+- in VSCodium or Visual Studio Code, open the command Palette
+- go to Python: Select Intepreter
+- select Enter Intepreter path
+- Enter the path to your .venv
+- to easily find your path, activate your .venv and type `which python` and the result is your path to that interpeter
