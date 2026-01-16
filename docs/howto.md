@@ -172,3 +172,13 @@ uv pip install pyodk
 - select Enter Intepreter path
 - Enter the path to your .venv
 - to easily find your path, activate your .venv and type `which python` and the result is your path to that interpeter
+
+## Import data from ODK Central
+- This is the sandbox project :https://odk.ncp.org.ph/projects/23/forms/household/submissions 
+- This contains Household Mock Data with respondents and repeating household members, and a select multiple field. (currently at n = 3)
+- This is the [pyodk documentation](https://getodk.github.io/pyodk/)
+
+### Create and run portable authentication scripts
+- Code should NEVER contain urls, project IDs, usernames or passwords
+- User specific access should be placed in a local cloned repository in ./config
+- ./config is in .gitignore and therefore should not be on github
